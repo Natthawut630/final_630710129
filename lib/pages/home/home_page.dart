@@ -95,7 +95,21 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(textQ[index]),
                 ),
-                OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[1])),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[0])),
+                    OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[1])),
+                    OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[2])),
+                    OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[3])),
+                    OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[4])),
+                    OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[5])),
+                    OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[6])),
+                    OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[7])),
+                    OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[8])),
+                    OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[9])),
+                  ],
+                ),
                 Row(
                   children: [
                     Expanded(
