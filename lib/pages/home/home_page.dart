@@ -1,6 +1,8 @@
+import 'package:election_2566_poll/services/api.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/poll.dart';
+import '../../models/response_body.dart';
 import '../my_scaffold.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,7 +14,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Poll>? _polls;
+  List<ResponseBody>? _respon;
   var _isLoading = false;
+
+  bool _isError = false;
+  String _errMessage = '';
 
   @override
   void initState() {
@@ -21,8 +27,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   _loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try{
+      var result = await ApiClient().getAllPoll();
+      setState(() {
+        _polls = result;
+      });
+    }catch(e){
+      setState(() {
+        _errMessage = e.toString();
+        _isError = true;
+      });
+    }finally{
+      setState(() {
+        _isLoading = false;
+      });
+    }
     // todo: Load list of polls here
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +61,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 if (_polls != null) _buildList(),
                 if (_isLoading) _buildProgress(),
+
+
               ],
             ),
           ),
@@ -47,11 +75,45 @@ class _HomePageState extends State<HomePage> {
     return ListView.builder(
       itemCount: _polls!.length,
       itemBuilder: (BuildContext context, int index) {
+        String textCPoll = _polls![index].choices.toString();
+        List<String> CPolls = textCPoll.split(',');
+        List<String> textQ = [
+          '1. บุคคลใดที่คุณสนับสนุนให้เป็นนายกรัฐมนตรีในการเลือกตั้งครั้งนี้',
+          '2. ในการเลือกตั้ง ส.ส เเบบเเบ่งเขต คุณจะเลือกผู้สมัครจากพรรคการเมืองใด',
+          '3. ในการเลือกตั้ง ส.ส เเบบบัญชีรายชื่อ คุณจะเลือกผู้สมัครจากพรรคการเมืองใด',
+        ];
+
         // todo: Create your poll item by replacing this Container()
-        return Container();
+        return Container(
+
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(textQ[index]),
+                ),
+                OutlinedButton(onPressed: (){_loadData();},child: Text(CPolls[1])),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(onPressed: (){
+
+                      }, child: const Text('ดูผลโหวต')),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
       },
     );
   }
+
+
 
   Widget _buildProgress() {
     return Container(
